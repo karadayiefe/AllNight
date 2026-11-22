@@ -1,6 +1,6 @@
- <div align="center">
+<div align="center">
 
-
+<img src="AllNight.png" alt="AllNight Logo" width="180">
 
 # AllNight
 
@@ -16,7 +16,5 @@ A lightweight Windows customization utility designed for a cleaner, more persona
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-FFFFFF?style=flat-square&labelColor=0d0d10&logo=github&logoColor=white)](https://github.com/karadayiefe/AllNight)
 
 <br/>
-
-
 
 </div>
