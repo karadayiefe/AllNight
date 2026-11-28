@@ -5,20 +5,26 @@ import { Palette } from 'lucide-react'
 function App() {
   const [isDark, setIsDark] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    window.allNight.getTheme().then((theme) => {
-      setIsDark(theme === 'dark')
-      setLoading(false)
-    })
+    window.allNight.getTheme()
+      .then((theme) => setIsDark(theme === 'dark'))
+      .catch(() => setError('Windows theme could not be read.'))
+      .finally(() => setLoading(false))
   }, [])
 
   async function toggleTheme() {
     const newTheme = isDark ? 'light' : 'dark'
 
-    await window.allNight.setTheme(newTheme)
+    setError(null)
 
-    setIsDark(newTheme === 'dark')
+    try {
+      const appliedTheme = await window.allNight.setTheme(newTheme)
+      setIsDark(appliedTheme === 'dark')
+    } catch {
+      setError('Windows theme could not be updated.')
+    }
   }
 
   return (
@@ -41,6 +47,8 @@ function App() {
 
         <div className="settings-card">
           <h2>Windows Theme</h2>
+
+          {error && <p className="error-message">{error}</p>}
 
           <div className="theme-row">
             <div>

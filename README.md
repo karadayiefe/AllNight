@@ -18,3 +18,18 @@ A lightweight Windows customization utility designed for a cleaner, more persona
 <br/>
 
 </div>
+
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+Create a Windows installer with:
+
+```bash
+npm run package:win
+```
+
+The packaged application loads the built React files from `dist/` instead of relying on the Vite development server.

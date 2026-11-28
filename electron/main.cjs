@@ -11,6 +11,8 @@ const { execFile } = require('node:child_process');
 const { promisify } = require('node:util');
 const runCommand = promisify(execFile);
 
+const isDevelopment = !app.isPackaged;
+
 // Windows'un mevcut kullanıcıya ait tema ayarlarının kayıt yolu.
 const themeKey =
   'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize';
@@ -63,10 +65,24 @@ async function setWindowsTheme(theme) {
 }
 
 // React arayüzünün mevcut Windows temasını istemesine izin verir.
-ipcMain.handle('theme:get', () => getWindowsTheme());
+ipcMain.handle('theme:get', async () => {
+  try {
+    return await getWindowsTheme();
+  } catch (error) {
+    console.error('Failed to read Windows theme:', error);
+    throw new Error('Windows theme could not be read.');
+  }
+});
 
 // React arayüzünün tema değiştirme isteğini karşılar.
-ipcMain.handle('theme:set', (_event, theme) => setWindowsTheme(theme));
+ipcMain.handle('theme:set', async (_event, theme) => {
+  try {
+    return await setWindowsTheme(theme);
+  } catch (error) {
+    console.error('Failed to update Windows theme:', error);
+    throw new Error('Windows theme could not be updated.');
+  }
+});
 
 // AllNight masaüstü penceresini oluşturur.
 function createWindow() {
@@ -86,8 +102,13 @@ function createWindow() {
     }
   });
 
-  // Geliştirme sırasında Vite sunucusunu açar.
-  window.loadURL('http://localhost:5173');
+  if (isDevelopment) {
+    // Geliştirme sırasında Vite sunucusunu açar.
+    window.loadURL('http://localhost:5173');
+  } else {
+    // Paketlenmiş uygulamada build edilmiş React dosyalarını açar.
+    window.loadFile(path.join(__dirname, '..', 'dist', 'index.html'));
+  }
 }
 
 // Electron hazır olduğunda pencereyi oluşturur.

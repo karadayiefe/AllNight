@@ -4,7 +4,7 @@ declare global {
   interface Window {
     allNight: {
       getTheme: () => Promise<'dark' | 'light'>
-      setTheme: (theme: 'dark' | 'light') => Promise<void>
+      setTheme: (theme: 'dark' | 'light') => Promise<'dark' | 'light'>
     }
   }
 }

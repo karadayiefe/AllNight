@@ -85,6 +85,12 @@
   color: #C4B5FD;
 }
 
+.error-message {
+  margin: -8px 0 18px;
+  color: #FCA5A5;
+  font-size: 12px;
+}
+
 .theme-row {
   display: flex;
   align-items: center;
